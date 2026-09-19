@@ -3,7 +3,18 @@ import plotly.express as px
 import streamlit as st
 
 
-st.header('Vehicle Sales Performance')
+st.set_page_config(
+    page_title='Vehicle Sales Dashboard',
+    page_icon='🚗',
+    layout='wide'
+)
+
+st.title('Vehicle Sales Dashboard')
+
+st.write(
+    'Interactive exploration of vehicle sales advertisements, '
+    'including pricing, mileage and vehicle characteristics.'
+)
 
 car_data = pd.read_csv('vehicles.csv')
 
