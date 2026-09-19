@@ -3,6 +3,7 @@ import plotly.express as px
 import streamlit as st
 
 
+# Page configuration
 st.set_page_config(
     page_title='Vehicle Sales Dashboard',
     page_icon='🚗',
@@ -16,8 +17,12 @@ st.write(
     'including pricing, mileage and vehicle characteristics.'
 )
 
+
+# Load data
 car_data = pd.read_csv('vehicles.csv')
 
+
+# Sidebar filters
 st.sidebar.header('Filters')
 
 vehicle_types = sorted(car_data['type'].dropna().unique())
@@ -40,15 +45,17 @@ filtered_data = car_data[
     (car_data['condition'].isin(selected_conditions))
 ]
 
+if filtered_data.empty:
+    st.warning('No vehicles match the selected filters.')
+    st.stop()
+
+
+# Dataset overview
 st.subheader('Dataset Overview')
 
 total_listings = len(filtered_data)
 median_price = filtered_data['price'].median()
 median_mileage = filtered_data['odometer'].median()
-
-if filtered_data.empty:
-    st.warning('No vehicles match the selected filters.')
-    st.stop()
 
 col1, col2, col3 = st.columns(3)
 
@@ -68,39 +75,7 @@ col3.metric(
 )
 
 
-
-hist_button = st.button('Create Histogram')
-
-if hist_button:
-    st.write(
-        'Creating a histogram for the vehicle sales advertisement dataset.'
-    )
-
-    fig = px.histogram(
-        car_data,
-        x='odometer',
-        title='Vehicle Mileage Distribution'
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
-
-
-build_scatter_plot = st.checkbox('Create Scatter Plot')
-
-if build_scatter_plot:
-    st.write(
-        'Creating a scatter plot comparing vehicle mileage and price.'
-    )
-
-    fig = px.scatter(
-        car_data,
-        x='odometer',
-        y='price',
-        title='Vehicle Price vs. Mileage'
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
-
+# Mileage distribution
 st.subheader('Mileage Distribution')
 
 exclude_mileage_outliers = st.checkbox(
@@ -130,6 +105,8 @@ st.plotly_chart(
     use_container_width=True
 )
 
+
+# Price vs. mileage
 st.subheader('Price vs. Mileage')
 
 limit_scatter_outliers = st.checkbox(
@@ -171,6 +148,8 @@ st.plotly_chart(
     use_container_width=True
 )
 
+
+# Median price by vehicle type
 st.subheader('Median Price by Vehicle Type')
 
 median_price_by_type = (
