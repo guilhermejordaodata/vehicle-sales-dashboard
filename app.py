@@ -129,3 +129,44 @@ st.plotly_chart(
     fig_mileage,
     use_container_width=True
 )
+
+st.subheader('Price vs. Mileage')
+
+limit_scatter_outliers = st.checkbox(
+    'Limit price and mileage to the 99th percentile',
+    value=True
+)
+
+scatter_data = filtered_data.copy()
+
+if limit_scatter_outliers:
+    price_99 = scatter_data['price'].quantile(0.99)
+    odometer_99 = scatter_data['odometer'].quantile(0.99)
+
+    scatter_data = scatter_data[
+        (scatter_data['price'] <= price_99) &
+        (scatter_data['odometer'] <= odometer_99)
+    ]
+
+fig_scatter = px.scatter(
+    scatter_data,
+    x='odometer',
+    y='price',
+    title='Vehicle Price vs. Mileage',
+    labels={
+        'odometer': 'Mileage',
+        'price': 'Price'
+    },
+    hover_data=[
+        'model',
+        'model_year',
+        'condition',
+        'type'
+    ],
+    opacity=0.5
+)
+
+st.plotly_chart(
+    fig_scatter,
+    use_container_width=True
+)
