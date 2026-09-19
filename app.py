@@ -100,3 +100,32 @@ if build_scatter_plot:
     )
 
     st.plotly_chart(fig, use_container_width=True)
+
+st.subheader('Mileage Distribution')
+
+exclude_mileage_outliers = st.checkbox(
+    'Limit mileage to the 99th percentile',
+    value=True
+)
+
+mileage_data = filtered_data.copy()
+
+if exclude_mileage_outliers:
+    mileage_99 = mileage_data['odometer'].quantile(0.99)
+
+    mileage_data = mileage_data[
+        mileage_data['odometer'] <= mileage_99
+    ]
+
+fig_mileage = px.histogram(
+    mileage_data,
+    x='odometer',
+    nbins=50,
+    title='Distribution of Vehicle Mileage',
+    labels={'odometer': 'Mileage'}
+)
+
+st.plotly_chart(
+    fig_mileage,
+    use_container_width=True
+)
