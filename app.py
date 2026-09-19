@@ -170,3 +170,29 @@ st.plotly_chart(
     fig_scatter,
     use_container_width=True
 )
+
+st.subheader('Median Price by Vehicle Type')
+
+median_price_by_type = (
+    filtered_data
+    .groupby('type')['price']
+    .median()
+    .sort_values(ascending=False)
+    .reset_index()
+)
+
+fig_type = px.bar(
+    median_price_by_type,
+    x='type',
+    y='price',
+    title='Median Vehicle Price by Type',
+    labels={
+        'type': 'Vehicle Type',
+        'price': 'Median Price'
+    }
+)
+
+st.plotly_chart(
+    fig_type,
+    use_container_width=True
+)
