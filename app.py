@@ -18,6 +18,30 @@ st.write(
 
 car_data = pd.read_csv('vehicles.csv')
 
+st.subheader('Dataset Overview')
+
+total_listings = len(car_data)
+median_price = car_data['price'].median()
+median_mileage = car_data['odometer'].median()
+
+col1, col2, col3 = st.columns(3)
+
+col1.metric(
+    'Total Listings',
+    f'{total_listings:,}'
+)
+
+col2.metric(
+    'Median Price',
+    f'${median_price:,.0f}'
+)
+
+col3.metric(
+    'Median Mileage',
+    f'{median_mileage:,.0f}'
+)
+
+
 
 hist_button = st.button('Create Histogram')
 
