@@ -18,11 +18,37 @@ st.write(
 
 car_data = pd.read_csv('vehicles.csv')
 
+st.sidebar.header('Filters')
+
+vehicle_types = sorted(car_data['type'].dropna().unique())
+conditions = sorted(car_data['condition'].dropna().unique())
+
+selected_types = st.sidebar.multiselect(
+    'Vehicle Type',
+    options=vehicle_types,
+    default=vehicle_types
+)
+
+selected_conditions = st.sidebar.multiselect(
+    'Condition',
+    options=conditions,
+    default=conditions
+)
+
+filtered_data = car_data[
+    (car_data['type'].isin(selected_types)) &
+    (car_data['condition'].isin(selected_conditions))
+]
+
 st.subheader('Dataset Overview')
 
-total_listings = len(car_data)
-median_price = car_data['price'].median()
-median_mileage = car_data['odometer'].median()
+total_listings = len(filtered_data)
+median_price = filtered_data['price'].median()
+median_mileage = filtered_data['odometer'].median()
+
+if filtered_data.empty:
+    st.warning('No vehicles match the selected filters.')
+    st.stop()
 
 col1, col2, col3 = st.columns(3)
 
