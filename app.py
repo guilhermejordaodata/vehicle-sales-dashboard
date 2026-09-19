@@ -2,27 +2,40 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-st.header('Performance de vendas de carro.')
 
-car_data = pd.read_csv('vehicles.csv')  # lendo os dados
-hist_button = st.button('Criar histograma')  # criar um botão
+st.header('Vehicle Sales Performance')
 
-if hist_button:  # se o botão for clicado
-    # escrever uma mensagem
+car_data = pd.read_csv('vehicles.csv')
+
+
+hist_button = st.button('Create Histogram')
+
+if hist_button:
     st.write(
-        'Criando um histograma para o conjunto de dados de anúncios de vendas de carros')
+        'Creating a histogram for the vehicle sales advertisement dataset.'
+    )
 
-    # criar um histograma
-    fig = px.histogram(car_data, x="odometer")
+    fig = px.histogram(
+        car_data,
+        x='odometer',
+        title='Vehicle Mileage Distribution'
+    )
 
-    # exibir um gráfico Plotly interativo
     st.plotly_chart(fig, use_container_width=True)
 
-# criar uma caixa de seleção
-build_histogram = st.checkbox('Criar um gráfico de dispersão')
 
-if build_histogram:  # se a caixa de seleção for selecionada
-    st.write('Criando um histograma para a coluna odometer')
-    # criar um gráfico de dispersão
-    fig = px.scatter(car_data, x="odometer", y="price")
+build_scatter_plot = st.checkbox('Create Scatter Plot')
+
+if build_scatter_plot:
+    st.write(
+        'Creating a scatter plot comparing vehicle mileage and price.'
+    )
+
+    fig = px.scatter(
+        car_data,
+        x='odometer',
+        y='price',
+        title='Vehicle Price vs. Mileage'
+    )
+
     st.plotly_chart(fig, use_container_width=True)
